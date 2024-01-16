@@ -1,0 +1,8 @@
+// Mobile first 
+
+@media screen and (min-width: $screen-lg-min) {
+  .hide-large {
+    display: none;
+  }
+}
+

@@ -1,0 +1,84 @@
+.frame {
+
+  .frame-title-bar {
+    background-color: $color-primary;
+    color: $color-white;
+    padding: 0.5rem;
+    text-align: center;
+  }
+
+  .frame-content {
+    background-color: $color-white;
+  }
+
+  &.side-bar {
+    display: flex;
+    height: 100%;
+
+    .frame-side-bar {
+      flex: 0 0 auto;
+      width: $side-bar-width;
+      background-color: $side-bar-background-color;
+      height: 100%;
+      
+      // on md screen and below, side bar is deteched from the frame by position: absolute
+      @media screen and (max-width: $screen-md-min) {
+        position: absolute;
+        min-width: $side-bar-min-width;
+        @include animation-slide;
+      }
+      
+      .-item-header {
+        font-weight: bold;
+        height: 100px;
+
+        .-close-button {
+          float: right;
+          cursor: pointer;
+        }
+
+        @media screen and (min-width: $screen-md-min) {
+          .-close-button {
+            display: none;
+          }
+        }
+      }
+
+      .frame-side-bar-item {
+        border-bottom: 1px solid #aaa;
+        cursor: pointer;
+
+        &:hover {
+          background-color: #eee;
+        }
+      }
+    }
+
+    .frame-content {
+      flex: 1 1 auto;
+      overflow-y: auto;
+
+      @media screen and (max-width: $screen-md-min) {
+        margin-left: $side-bar-min-width;
+      }
+    }
+  }
+
+  &.title-bar {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+
+    .frame-title-bar {
+      flex: 0 0 auto;
+      min-height: 48px;
+    }
+
+    .frame-content {
+      padding: 0.5rem;
+      flex: 1 1 auto;
+      overflow-y: auto;
+    }
+  }
+}
