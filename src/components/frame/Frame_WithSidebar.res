@@ -20,6 +20,6 @@ let make = (~titleElement=React.null, ~menuItems: array<React.element>, ~classNa
       )
       ->React.array}
     </div>
-    <div className={"frame-content" ++ className}> {children} </div>
+    <div className={"frame-content " ++ className}> {children} </div>
   </div>
 }
