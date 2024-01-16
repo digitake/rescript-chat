@@ -73,6 +73,9 @@
     .frame-title-bar {
       flex: 0 0 auto;
       min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .frame-content {
