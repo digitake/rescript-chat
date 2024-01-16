@@ -13,6 +13,7 @@ let make = () => {
     <Frame.WithTitlebar title>
       {
         switch url.path {
+        | list{"profile", userId} => <Profile userId/>
         | list{"1n1", userId} => <PrivateChat userId/>
         | list{} => <UserList />
         | _ => <div>{React.string("Not found")}</div>

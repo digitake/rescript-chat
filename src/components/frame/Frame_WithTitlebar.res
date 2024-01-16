@@ -1,7 +1,13 @@
+open Context.Frame
+
 @react.component
-let make = (~title: option<React.element>=?, ~children) => {
-  <div className="frame title-bar">
-    <div className="frame-title-bar"> {title->Belt.Option.getWithDefault(React.null)} </div>
-    <div className="frame-content"> {children} </div>
-  </div>
+let make = (~title=React.null, ~children) => {
+  let (titleContent, setTitleContent) = React.useState(() => React.null)
+
+  <Titlebar.Context.Provider value={title: titleContent, setTitle: x=>setTitleContent(_=>x)}>
+    <div className="frame title-bar">
+      <div className="frame-title-bar"> {titleContent} </div>
+      <div className="frame-content"> {children} </div>
+    </div>
+  </Titlebar.Context.Provider>
 }
