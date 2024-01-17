@@ -6,19 +6,15 @@ let make = (~chatData) => {
   let viewRef = React.useRef(Js.Nullable.null)
 
   React.useEffect1(() => {
-    // myRef.current && myRef.current.scrollIntoView() 
-    // viewRef.current.scrollTop = viewRef.current.scrollHeight;
     switch viewRef.current {
-    | Value(view) => Js.log(view)
+    | Value(view) => Console.log2("view", view)
     | _ => ()
     }
 
     None
   }, [chatData]);
 
-
-  <div className="chat-view" ref={viewRef->ReactDOM.Ref.domRef}>
-    <div className="chat-view__messages">
+  <div className="chatbox" ref={viewRef->ReactDOM.Ref.domRef}>
       {
         chatData
         ->Belt.Array.mapWithIndex((index, chat) => {
@@ -26,7 +22,6 @@ let make = (~chatData) => {
         })
         ->React.array
       }
-    </div>
   </div>
 
 }
