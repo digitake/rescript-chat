@@ -1,1 +1,2 @@
-module Chat = Hook_Chat
+module Chatroom = Hook_Chatroom
+module User = Hook_User
