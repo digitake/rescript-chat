@@ -10,10 +10,14 @@ let chatSideToString = (chatSide: side) =>
   };
 
 @react.component
-let make = (~chatSide=Right, ~chat) => {
+let make = (~chatSide=Right, ~chat:Data.ChatItem.t) => {
   <div className={"chatbox-line "++chatSideToString(chatSide)}>
     <div className={"chatbox-item "++chatSideToString(chatSide)}>
-    {chat->React.string}
+    {switch chat.data{
+    | Text(text) => <div className="chatbox-text">{React.string(text)}</div>
+    | Image(Url(url)) => <div className="chatbox-image"><img src={url} /></div>
+    | _ => <div className="chatbox-text">{React.string("Not implement")}</div>
+    }}
     </div>
   </div>
 }
