@@ -35,6 +35,7 @@
     padding-right: 24px;
     font-size: 1em;
     min-width: 40px;
+    text-transform: uppercase;
 
     cursor: pointer;
     background-color: $color-primary-light; 
@@ -80,11 +81,11 @@
     display: inline-block;
     color: $color-main-text;
 
-    &.left{
+    &.left {
       box-shadow: 2px 2px $color-main-shadow;
     }
 
-    &.right{
+    &.right {
       box-shadow: 2px 2px $color-main-shadow;
     }
 
