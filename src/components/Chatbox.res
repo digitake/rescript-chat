@@ -1,11 +1,10 @@
-open React
-
 type chatData = array<Data.ChatItem.t>
 
 @react.component
-let make = (~chatData) => {
+let make = (~chatData:array<Data.ChatItem.t>) => {
 
   let viewRef = React.useRef(Js.Nullable.null)
+  let me = Context.Auth.useMyProfile()
 
   React.useEffect1(() => {
     switch viewRef.current {
@@ -23,9 +22,9 @@ let make = (~chatData) => {
   <div className="chatbox">
       {
         chatData
-        ->Belt.Array.mapWithIndex((index, chat) => {
-          let chatSide = mod(index, 2) == 0 ? ChatMessage.Left : Right
-          <ChatMessage key={index->Js.Int.toString} chat chatSide/>
+        ->Belt.Array.mapWithIndex((index, item) => {
+          let chatSide = me.id == item.owner.id ? ChatMessage.Right : Left
+          <ChatMessage key={index->Js.Int.toString} chat=item chatSide/>
         })
         ->React.array
       }
