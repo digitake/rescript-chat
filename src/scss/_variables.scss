@@ -1,5 +1,28 @@
+// White theme
 $color-primary: #007bff;
-$color-white: #ffffff;
+$color-secondary: #6c757d;
+
+$color-main-background: #f9f7f2;
+$color-main-text: #212529;
+$color-main-text-light: #6c757d;
+$color-main-shadow: #343a40;
+
+// Secondary color is used for the frame
+$color-secondary-background: lighten($color-main-background, 10%);
+$color-secondary-text: lighten($color-main-text, 10%);
+$color-secondary-text-light: lighten($color-main-text-light, 10%);
+$color-secondary-shadow: lighten($color-main-shadow, 10%);
+
+
+
+// Dark theme
+// $color-primary: #343a40;
+// $color-main-background: #343a40;
+// $color-main-text: #f8f9fa;
+// $color-main-text-light: #6c757d;
+// $color-main-shadow: #212529;
+
+
 
 $side-bar-width: 15rem;
 $side-bar-min-width: 48px;

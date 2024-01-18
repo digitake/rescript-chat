@@ -2,13 +2,13 @@
 
   .frame-title-bar {
     background-color: $color-primary;
-    color: $color-white;
+    color: $color-main-text;
     padding: 0.5rem;
     text-align: center;
   }
 
   .frame-content {
-    background-color: $color-white;
+    background-color: $color-secondary-background;
   }
 
   &.side-bar {

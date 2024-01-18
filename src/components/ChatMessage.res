@@ -1,19 +1,19 @@
-type chatType =
+type side =
 | @as("left") Left
 | @as("right") Right;
 
 
-let chatTypeToString = (chatType: chatType) =>
-  switch chatType {
+let chatSideToString = (chatSide: side) =>
+  switch chatSide {
   | Left => "left"
   | Right => "right"
   };
 
 @react.component
-let make = (~chatType=Right, ~chat) => {
-  <div className={"chatbox-item "++chatTypeToString(chatType)}>
-  {
-    chat->React.string
-  }
+let make = (~chatSide=Right, ~chat) => {
+  <div className={"chatbox-line "++chatSideToString(chatSide)}>
+    <div className={"chatbox-item "++chatSideToString(chatSide)}>
+    {chat->React.string}
+    </div>
   </div>
 }

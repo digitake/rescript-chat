@@ -41,3 +41,5 @@ module Chatroom = {
     messages: array<ChatItem.t>,
   }
 }
+
+module Mock = Data_Mock

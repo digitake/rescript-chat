@@ -32,26 +32,40 @@
 }
 
 // ---------------------- Chatbox component --------------------
-.chatbox1 {
-  flex: 1;
-  background-color: silver;
-  overflow: auto;
-}
 
-.chatbox-item{
-  transition: top 1s opacity 1s display 1s width 1s height 1s;
+.chatbox-line {
+  margin: 0.5rem;
 
   &.left{
     text-align: left;
-    margin-left: $margin-default;
+    margin-right: 64px;
   }
 
   &.right{
     text-align: right;
-    margin-right: $margin-default;
+    margin-left: 64px;
   }
 
-  .avatar {
+  .chatbox-item {
+    transition: all 0.5s;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    background-color: $color-main-background;
     display: inline-block;
+    color: $color-main-text;
+
+    &.left{
+      margin-left: $margin-default;
+      box-shadow: 2px 2px $color-main-shadow;
+    }
+
+    &.right{
+      margin-right: $margin-default;
+      box-shadow: 2px 2px $color-main-shadow;
+    }
+
+    .avatar {
+      display: inline-block;
+    }
   }
 }

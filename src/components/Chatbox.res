@@ -1,5 +1,7 @@
 open React
 
+type chatData = array<Data.ChatItem.t>
+
 @react.component
 let make = (~chatData) => {
 
@@ -7,21 +9,27 @@ let make = (~chatData) => {
 
   React.useEffect1(() => {
     switch viewRef.current {
-    | Value(view) => Console.log2("view", view)
+    | Value(view) => {
+        let domObject = view->ReactDOM.domElementToObj
+        domObject["scrollIntoView"]()
+      }
     | _ => ()
     }
 
     None
   }, [chatData]);
 
-  <div className="chatbox" ref={viewRef->ReactDOM.Ref.domRef}>
+
+  <div className="chatbox">
       {
         chatData
         ->Belt.Array.mapWithIndex((index, chat) => {
-          <ChatMessage key={index->Js.Int.toString} chat={chat} />
+          let chatSide = mod(index, 2) == 0 ? ChatMessage.Left : Right
+          <ChatMessage key={index->Js.Int.toString} chat chatSide/>
         })
         ->React.array
       }
+      <div ref={viewRef->ReactDOM.Ref.domRef}></div>
   </div>
 
 }
