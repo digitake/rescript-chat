@@ -1,11 +1,16 @@
 // White theme
 $color-primary: #007bff;
+$color-primary-light: #c3d9ff;
 $color-secondary: #6c757d;
 
 $color-main-background: #f9f7f2;
 $color-main-text: #212529;
 $color-main-text-light: #6c757d;
+$color-main-text-lighter: #dbe1e7;
 $color-main-shadow: #343a40;
+$color-main-button: #008CBA;
+$color-main-button-hover: #007bff;
+
 
 // Secondary color is used for the frame
 $color-secondary-background: lighten($color-main-background, 10%);

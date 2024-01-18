@@ -28,8 +28,16 @@ let make = (~userId) => {
     })
   })
 
-  <div>
+  let onEnter = (text) => {
+    setChatData((chatData) => {
+      let newChatData = chatData->Belt.Array.concat([text])
+      newChatData
+    })
+  }
+
+  <div className="chat">
     {React.string(`Talking to ${userId}`)}
     <Chatbox chatData />
+    <Inputbox onEnter/>
   </div>
 }
