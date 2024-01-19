@@ -1,4 +1,4 @@
-open Context.Frame
+open FrameContext
 
 @react.component
 let make = (~title=React.null, ~children) => {

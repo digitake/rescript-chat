@@ -12,7 +12,7 @@ let make = () => {
       {switch myProfile {
       | None => React.string("Loading...")
       | Some(_profile) =>
-        <Context.Auth.Provider value={me: myProfile}>
+        <AuthContext.Provider value={me: myProfile}>
           {switch url.path {
           | _ => <PrivateChat userId="id-12345" />
           // | list{"profile", userId} => <Profile userId/>
@@ -20,7 +20,7 @@ let make = () => {
           // | list{} => <UserList />
           // | _ => <div>{React.string("Not found")}</div>
           }}
-        </Context.Auth.Provider>
+        </AuthContext.Provider>
       }}
     </Frame.WithTitlebar>
   </Frame.WithSidebar>

@@ -4,7 +4,7 @@ type chatData = array<Data.ChatItem.t>
 let make = (~chatData:array<Data.ChatItem.t>) => {
 
   let viewRef = React.useRef(Js.Nullable.null)
-  let me = Context.Auth.useMyProfile()
+  let me = AuthContext.useMyProfile()
 
   React.useEffect1(() => {
     switch viewRef.current {

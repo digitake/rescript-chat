@@ -1,7 +1,7 @@
 @react.component
 let make = (~userId="me") => {
   
-  let {title, setTitle} = React.useContext(Context.Frame.Titlebar.context)
+  let {title, setTitle} = React.useContext(FrameContext.Titlebar.context)
   // Create custom hook that can change the screen title
   // Frame.WithTitle should provide a way to change the title
 

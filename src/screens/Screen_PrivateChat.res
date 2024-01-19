@@ -2,11 +2,7 @@
 
 @react.component
 let make = (~userId) => {
-
-  let {setTitle} = React.useContext(Context.Frame.Titlebar.context)
-  let (chatData:array<Data.ChatItem.t>, setChatData) = React.useState(() => [])
-  let (socket, setSocket) = React.useState(() => None)
-  let me = Context.Auth.useMyProfile()
+  let me = AuthContext.useMyProfile()
 
   let connectToWebsocket = (url) => {
     open Webapi
