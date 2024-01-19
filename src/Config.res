@@ -1,0 +1,1 @@
+let websocketBaseURL = "wss://echo.websocket.org"

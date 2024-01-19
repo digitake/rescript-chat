@@ -97,7 +97,7 @@ let useChatroom = (~chatroomId) => {
 
   // connect to chatroom
   React.useEffect0(() => {
-    connectToWebsocket("wss://echo.websocket.org")
+    connectToWebsocket(Config.websocketBaseURL)
 
     Some(close)
   })
