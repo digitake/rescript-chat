@@ -1,15 +1,21 @@
-
+open React
 
 @react.component
 let make = (~userId) => {
+  
   let me = AuthContext.useMyProfile()
+  let {setTitle} = useContext(FrameContext.Titlebar.context)
+  let (chatData:array<Data.ChatItem.t>, setChatData) = useState(() => [])
+  // let (socket, setSocket) = useState(() => None)
+  let socketRef = useRef(None)
 
   let connectToWebsocket = (url) => {
     open Webapi
 
       // Create WebSocket connection.
     let s = WebSocket.make(url)
-    setSocket(_=>Some(s))
+    // setSocket(_=>Some(s))
+    socketRef.current = Some(s)
 
     // Connection opened
     s->WebSocket.addOpenListener(_ => {
@@ -46,7 +52,7 @@ let make = (~userId) => {
     connectToWebsocket("wss://echo.websocket.org")
   
     Some(() => {
-      switch (socket) {
+      switch (socketRef.current) {
       | Some(s) => {
         Js.log("Closing websocket")
         s->Webapi.WebSocket.close
@@ -57,7 +63,7 @@ let make = (~userId) => {
   })
 
   let onEnter = (text) => {
-    switch (socket) {
+    switch (socketRef.current) {
     | Some(s) => {
       Js.log("Sending message")
       switch text {
