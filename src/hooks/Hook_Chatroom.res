@@ -17,7 +17,7 @@ type t = {
 let useChatroom = (~chatroomId) => {
   let socketRef = useRef(None)
   let me = AuthContext.useMyProfile()
-  let {getUserById} = Hook_Users.useUsers()
+  
   let (messages, setMessages) = useState(() => [])
   let (status, setStatus) = useState(() => Connecting)
 
@@ -32,8 +32,8 @@ let useChatroom = (~chatroomId) => {
       setStatus(_ => Open(Js.Date.make()))
 
       let msg = Js.Json.stringifyAny({
-        "cmd": "hello",
-        "payload": `${me.id}-${chatroomId}`,
+        "type": "user:join",
+        "data": `${me.id}-${chatroomId}`,
       })
 
       switch msg {
@@ -45,17 +45,12 @@ let useChatroom = (~chatroomId) => {
     // Listen for messages
     s->WebSocket.addMessageListener(event => {
       switch event.data {
-      | String(s) => {
-          let newItem = (
-            {
-              owner: getUserById(chatroomId)->Option.getOr(Data.User.guest()),
-              data: Text(s),
-              timestamp: Js.Date.make(),
-            }: Data.ChatItem.t
-          )
-          setMessages(oldMsg => oldMsg->Array.concat([newItem]))
+        | String(rawJson) => {
+          let json = Js.Json.parseExn(rawJson)
+          let item = Data.ChatItem.Decode.item(json)
+          setMessages(oldMsg => oldMsg->Array.concat([item]))
         }
-      | _ => Js.log("Not a string")
+        | _ => Js.log("Received non-string message")
       }
     })
 
@@ -70,16 +65,13 @@ let useChatroom = (~chatroomId) => {
     | Some(s) => {
         let newItem = (
           {
-            owner: me,
+            owner: me.id,
             data: Text(msg),
             timestamp: Js.Date.make(),
           }: Data.ChatItem.t
         )
         setMessages(oldMsg => oldMsg->Array.concat([newItem]))
-        switch newItem.data {
-        | Text(t) => s->WebSocket.sendText(t)
-        | _ => Js.log("Not a text message")
-        }
+        s->WebSocket.sendText(Data.ChatItem.Encode.item(newItem)->Js.Json.stringify)
       }
     | None => Js.Exn.raiseError("Socket not connected")
     }
@@ -97,7 +89,8 @@ let useChatroom = (~chatroomId) => {
 
   // connect to chatroom
   React.useEffect0(() => {
-    connectToWebsocket(Config.websocketBaseURL)
+    let target = `${Config.websocketBaseURL}/chatroom/${chatroomId}/`
+    connectToWebsocket(target)
 
     Some(close)
   })

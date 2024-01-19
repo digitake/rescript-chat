@@ -1,1 +1,1 @@
-let websocketBaseURL = "wss://echo.websocket.org"
+let websocketBaseURL = "ws://localhost:8000/ws"
