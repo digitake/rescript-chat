@@ -49,6 +49,14 @@
       color: $color-main-text-lighter;
       border-radius: 12px 12px 12px 12px;
     }
+
+    &.disabled {
+      background-color: $color-secondary-light;
+      color: $color-main-text-lighter;
+      border: 0px;
+      border-radius: 12px 12px 12px 12px;
+      cursor: not-allowed;
+    }
   }
 
   .chatbox {
@@ -75,7 +83,7 @@
 
   .chatbox-item {
     transition: all 0.5s;
-    padding: 0.5rem;
+    padding: 0.5rem 1rem 0.5rem 1rem;
     border-radius: 1rem;
     background-color: $color-main-background;
     display: inline-block;

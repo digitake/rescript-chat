@@ -3,12 +3,18 @@ open React
 @react.component
 let make = (~userId) => {
   let {setTitle} = useContext(FrameContext.Titlebar.context)
-  let {messages, sendMessage, close} = Hook.Chatroom.useChatroom(~chatroomId=userId)
+  let {messages, sendMessage, status, close} = Hook.Chatroom.useChatroom(~chatroomId=userId)
+  let {getUserById} = Hook.Users.useUsers()
 
   //1. Load profile
   React.useEffect0(() => {
     Js.log2("useEffect", userId)
-    setTitle(`Talking to ${userId}`->React.string)
+
+    switch getUserById(userId) {
+    | Some(user) => setTitle(user.name->React.string)
+    | None => ()
+    }
+
     None
   })
 
@@ -21,6 +27,9 @@ let make = (~userId) => {
 
   <div className="chat">
     <Chatbox chatData=messages />
-    <Inputbox onEnter />
+    {switch status {
+      | Open(_) => <Inputbox onEnter />
+      | _ => <Inputbox onEnter disabled=true/>
+    }}
   </div>
 }

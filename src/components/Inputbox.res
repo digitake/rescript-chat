@@ -1,7 +1,7 @@
 open React
 
 @react.component
-let make = (~onChange=?, ~onEnter) => {
+let make = (~onChange=?, ~disabled=false, ~onEnter) => {
   let (value, setValue) = useState(_ => "")
 
   let onEnter = () => {
@@ -22,6 +22,7 @@ let make = (~onChange=?, ~onEnter) => {
   <div className="inputbox">
     <label className="label1" htmlFor="inputmsg"> {""->React.string} </label>
     <input
+      disabled
       id="inputmsg"
       type_="text"
       className="text"
@@ -34,6 +35,11 @@ let make = (~onChange=?, ~onEnter) => {
       }}
       onKeyPress={handleKeyPress}
     />
-    <input type_="button" value="Send" onClick={_evt => onEnter()} className="button" />
+    <input
+      type_="button"
+      value="Send"
+      onClick={_evt => onEnter()}
+      className={"button" ++ (disabled ? " disabled" : "")}
+    />
   </div>
 }
