@@ -17,6 +17,7 @@ type t = {
 let useChatroom = (~chatroomId) => {
   let socketRef = useRef(None)
   let me = AuthContext.useMyProfile()
+  let {getUserById} = Hook_Users.useUsers()
   let (messages, setMessages) = useState(() => [])
   let (status, setStatus) = useState(() => Connecting)
 
@@ -47,11 +48,7 @@ let useChatroom = (~chatroomId) => {
       | String(s) => {
           let newItem = (
             {
-              owner: {
-                id: "1",
-                name: "John Doe",
-                avatar: Url("https://i.pravatar.cc/300"),
-              },
+              owner: getUserById(chatroomId)->Option.getOr(Data.User.guest()),
               data: Text(s),
               timestamp: Js.Date.make(),
             }: Data.ChatItem.t
