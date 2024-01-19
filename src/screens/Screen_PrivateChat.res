@@ -27,9 +27,12 @@ let make = (~userId) => {
 
   <div className="chat">
     <Chatbox chatData=messages />
-    {switch status {
-      | Open(_) => <Inputbox onEnter />
-      | _ => <Inputbox onEnter disabled=true/>
-    }}
+    <Inputbox
+      onEnter
+      disabled={switch status {
+      | Open(_) => false
+      | _ => true
+      }}
+    />
   </div>
 }

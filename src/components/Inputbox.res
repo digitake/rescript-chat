@@ -39,7 +39,7 @@ let make = (~onChange=?, ~disabled=false, ~onEnter) => {
       type_="button"
       value="Send"
       onClick={_evt => onEnter()}
-      className={"button" ++ (disabled ? " disabled" : "")}
+      className={"button" ++ ((disabled || value=="") ? " disabled" : "")}
     />
   </div>
 }
