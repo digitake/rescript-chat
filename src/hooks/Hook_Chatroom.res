@@ -14,50 +14,61 @@ type t = {
   close: unit => unit,
 }
 
-let useChatroom = (~chatroomId) => {
+let useChatroom = (~autoReconnect as _=true, ~chatroomId) => {
+  let target = `${Config.websocketBaseURL}/chatroom/${chatroomId}/`
+
   let socketRef = useRef(None)
   let me = AuthContext.useMyProfile()
   
   let (messages, setMessages) = useState(() => [])
   let (status, setStatus) = useState(() => Connecting)
 
+  let onSocketOpen = (socket) => {
+    setStatus(_ => Open(Js.Date.make()))
+
+    let msg = Js.Json.stringifyAny({
+      "type": "user:join",
+      "data": `${me.id}-${chatroomId}`,
+    })
+
+    switch msg {
+    | Some(data) => socket->WebSocket.sendText(data)
+    | None => Js.log("Failed to stringify message")
+    }
+  }
+
   let connectToWebsocket = url => {
     // Create WebSocket connection.
-    let s = WebSocket.make(url)
-    socketRef.current = Some(s)
+    switch socketRef.current {
+    | None => socketRef.current = Some(WebSocket.make(url))
+    | Some(s) if !(s->WebSocket.isOpen) => socketRef.current = Some(WebSocket.make(url))
+    | _ => Js.log("Socket already open")
+    }
+    
 
-    // Connection opened
-    s->WebSocket.addOpenListener(_evt => {
-      // cmd:subcmd:payload
-      setStatus(_ => Open(Js.Date.make()))
+    switch (socketRef.current) {
+    | Some(s) => {   
+      s->WebSocket.addOpenListener(_=> onSocketOpen(s))
 
-      let msg = Js.Json.stringifyAny({
-        "type": "user:join",
-        "data": `${me.id}-${chatroomId}`,
+      // Listen for messages
+      s->WebSocket.addMessageListener(event => {
+        switch event.data {
+          | String(rawJson) => {
+            let json = Js.Json.parseExn(rawJson)
+            let item = Data.ChatItem.Decode.item(json)
+            setMessages(oldMsg => oldMsg->Array.concat([item]))
+          }
+          | _ => Js.log("Received non-string message")
+        }
       })
 
-      switch msg {
-      | Some(data) => s->WebSocket.sendText(data)
-      | None => Js.log("Failed to stringify message")
-      }
-    })
-
-    // Listen for messages
-    s->WebSocket.addMessageListener(event => {
-      switch event.data {
-        | String(rawJson) => {
-          let json = Js.Json.parseExn(rawJson)
-          let item = Data.ChatItem.Decode.item(json)
-          setMessages(oldMsg => oldMsg->Array.concat([item]))
-        }
-        | _ => Js.log("Received non-string message")
-      }
-    })
-
-    s->WebSocket.addCloseListener(event => {
-      Js.log2("Socket closed ", event)
-      setStatus(_ => Closed(Js.Date.make()))
-    })
+      s->WebSocket.addCloseListener(event => {
+        Js.log2("Socket closed ", event)
+        setStatus(_ => Closed(Js.Date.make()))
+      })
+    }
+    | None => Js.log("Failed to create socket")
+    }
   }
 
   let sendMessage = msg => {
@@ -79,17 +90,15 @@ let useChatroom = (~chatroomId) => {
 
   let close = () => {
     switch socketRef.current {
-    | Some(s) if s->WebSocket.isOpen => {
-        Js.log("Closing websocket")
+    | Some(s) => {
+        Js.log("Closing websocket...")
         s->WebSocket.close
       }
     | _ => ()
     }
   }
 
-  // connect to chatroom
   React.useEffect0(() => {
-    let target = `${Config.websocketBaseURL}/chatroom/${chatroomId}/`
     connectToWebsocket(target)
 
     Some(close)
