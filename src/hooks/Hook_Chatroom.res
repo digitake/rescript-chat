@@ -14,7 +14,7 @@ type t = {
   close: unit => unit,
 }
 
-let useChatroom = (~autoReconnect as _=true, ~chatroomId) => {
+let useChatroom = (~autoReconnect=true, ~chatroomId) => {
   let target = `${Config.websocketBaseURL}/chatroom/${chatroomId}/`
 
   let socketRef = useRef(None)
@@ -37,37 +37,45 @@ let useChatroom = (~autoReconnect as _=true, ~chatroomId) => {
     }
   }
 
-  let connectToWebsocket = url => {
+  let onSocketClose = () => {
+    setStatus(_ => Closed(Js.Date.make()))
+  }
+
+  let onSocketMessage = (_socket, event:WebSocket.messageEvent<Webapi__Blob.t>
+ ) => {
+    switch event.data {
+    | String(rawJson) => {
+        let json = Js.Json.parseExn(rawJson)
+        let item = Data.ChatItem.Decode.item(json)
+        setMessages(oldMsg => oldMsg->Array.concat([item]))
+      }
+    | _ => Js.log("Received non-string message")
+    }
+  }
+
+  let installListeners = socket => {
+    socket->WebSocket.addOpenListener(_=> onSocketOpen(socket))
+    socket->WebSocket.addMessageListener(evt => onSocketMessage(socket, evt))
+    socket->WebSocket.addCloseListener(_=> onSocketClose())
+  }
+
+  let connect = url => {
+    // The is very side-effect full. The connect method will ensure that the socket is open
+    // If the socket is already open, it will do nothing and return the same socket
+    // If the socket is not open, it will create a new socket and return it
+
+    let _prepSocket = () => {
+      let socket = Api.WebSocket.makeWithSubProtocol(url,["chatdoo-v1"])
+      socketRef.current = Some(socket)
+      installListeners(socket)
+    }
+
+    Js.log("Connecting to websocket...")
     // Create WebSocket connection.
     switch socketRef.current {
-    | None => socketRef.current = Some(WebSocket.make(url))
-    | Some(s) if !(s->WebSocket.isOpen) => socketRef.current = Some(WebSocket.make(url))
+    | None => _prepSocket()
+    | Some(s) if !(s->WebSocket.isOpen) => _prepSocket()
     | _ => Js.log("Socket already open")
-    }
-    
-
-    switch (socketRef.current) {
-    | Some(s) => {   
-      s->WebSocket.addOpenListener(_=> onSocketOpen(s))
-
-      // Listen for messages
-      s->WebSocket.addMessageListener(event => {
-        switch event.data {
-          | String(rawJson) => {
-            let json = Js.Json.parseExn(rawJson)
-            let item = Data.ChatItem.Decode.item(json)
-            setMessages(oldMsg => oldMsg->Array.concat([item]))
-          }
-          | _ => Js.log("Received non-string message")
-        }
-      })
-
-      s->WebSocket.addCloseListener(event => {
-        Js.log2("Socket closed ", event)
-        setStatus(_ => Closed(Js.Date.make()))
-      })
-    }
-    | None => Js.log("Failed to create socket")
     }
   }
 
@@ -98,8 +106,24 @@ let useChatroom = (~autoReconnect as _=true, ~chatroomId) => {
     }
   }
 
+  React.useEffect1(()=>{
+    switch status {
+    | Closed(_) => {
+        if autoReconnect {
+          let _ = setTimeout(() => {
+            Js.log2("Reconnecting to websocket...", target)
+            connect(target)
+        }, 5000)
+        }
+      }
+    | _ => ()
+    }
+
+    None
+  }, [status])
+
   React.useEffect0(() => {
-    connectToWebsocket(target)
+    connect(target)
 
     Some(close)
   })
