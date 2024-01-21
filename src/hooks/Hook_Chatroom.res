@@ -28,7 +28,7 @@ let useChatroom = (~autoReconnect=true, ~chatroomId) => {
 
     let msg = Js.Json.stringifyAny({
       "type": "user:join",
-      "data": `${me.id}-${chatroomId}`,
+      "data": `${me.id->Data.User.userIdToString}-${chatroomId}`,
     })
 
     switch msg {
@@ -84,7 +84,7 @@ let useChatroom = (~autoReconnect=true, ~chatroomId) => {
     | Some(s) => {
         let newItem = (
           {
-            owner: me.id,
+            sender: me.id,
             data: Text(msg),
             timestamp: Js.Date.make(),
           }: Data.ChatItem.t

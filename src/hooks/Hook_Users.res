@@ -11,7 +11,7 @@ let useUsers = () => {
 
   let reloadUsers = () => {
     userDictRef.current->Js.Dict.set("id-12345", {
-      id: "id-12345",
+      id: Obj.magic("id-12345"),
       name: "John Doe",
       avatar: Url("https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"),
     })
@@ -20,5 +20,12 @@ let useUsers = () => {
   let getUserById = (id:string) => {
     userDictRef.current->Js.Dict.get(id)
   }
+
+  useEffect0(() => {
+    //First load
+    reloadUsers()
+    None
+  })
+
   { getUserById, reloadUsers }
 }

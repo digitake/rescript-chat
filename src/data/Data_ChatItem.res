@@ -8,10 +8,12 @@ type data =
   | File(rawDataType)
   | VideoUrl(string)
 
-type ownerId = string
+type senderId = Data_UserProfile.userId
+let noSender = Obj.magic("")
+
 
 type t = {
-  owner: ownerId,
+  sender: senderId,
   data: data,
   timestamp: Js.Date.t,
 }
@@ -20,8 +22,8 @@ module Decode = {
   let item = (json: Js.Json.t): t => {
     switch Js.Json.decodeObject(json) {
     | Some(obj) => {
-        let ownerId =
-          Js.Dict.get(obj, "owner")
+        let senderId =
+          Js.Dict.get(obj, "sender")
           ->Option.flatMap(x => Js.Json.decodeString(x))
           ->Option.getOr("")
         let subtype =
@@ -29,8 +31,9 @@ module Decode = {
           ->Option.flatMap(x => Js.Json.decodeString(x))
           ->Option.getOr("unknown")
         let timestamp = Js.Dict.get(obj, "timestamp")->Option.flatMap(x => Js.Json.decodeNumber(x))
+
         {
-          owner: ownerId,
+          sender: Obj.magic(senderId),  // This is a trick to make senderId a senderId type
           data: {
             let data =
               Js.Dict.get(obj, "data")
@@ -53,7 +56,7 @@ module Decode = {
         }
       }
     | None => {
-        owner: "",
+        sender: noSender,
         data: Text("?"),
         timestamp: Js.Date.make(),
       }
@@ -64,7 +67,7 @@ module Decode = {
 module Encode = {
   let item = (item: t) => {
     [
-      ("owner", item.owner->Js.Json.string),
+      ("sender", item.sender->Obj.magic->Js.Json.string),
       ("type", "chat"->Js.Json.string),
       (
         "subtype",

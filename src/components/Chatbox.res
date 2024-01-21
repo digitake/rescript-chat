@@ -23,7 +23,7 @@ let make = (~chatData:array<Data.ChatItem.t>) => {
       {
         chatData
         ->Belt.Array.mapWithIndex((index, item) => {
-          let chatSide = me.id == item.owner ? ChatMessage.Right : Left
+          let chatSide = me.id == item.sender ? ChatMessage.Right : Left
           <ChatMessage key={index->Js.Int.toString} chat=item chatSide/>
         })
         ->React.array
