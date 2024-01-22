@@ -2,8 +2,8 @@ open React
 module User = Data.User
 
 @react.component
-let make = (~profile: User.t) =>
-  <div className="user-profile-item">
+let make = (~profile: User.t, ~onClick=?) =>
+  <div className="user-profile-item" onClick=?{onClick->Option.map(f=>_evt=>f(profile))}>
     <div className="avatar">
       <img
         src={switch profile.avatar {

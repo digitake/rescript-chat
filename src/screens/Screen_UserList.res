@@ -1,5 +1,5 @@
 open React
-
+open Data
 
 @react.component
 let make = () => {
@@ -7,15 +7,19 @@ let make = () => {
   let (profiles, setProfiles) = React.useState(_=>[])
 
   useEffect0(() => {
-    setProfiles(_=>Data.Mock.profileList)
+    setProfiles(_=>Mock.profileList)
     None
   })
+
+  let onClick = (profile:User.t) =>{
+    RescriptReactRouter.push(`/chat/${profile.id->User.userIdToString}`)
+  }
   
   <div className="user-profile-list">
   {
     profiles
     ->Array.mapWithIndex((profile, idx)=>{
-      <UserProfileItem key={`p-${idx->Int.toString}`} profile />
+      <UserProfileItem key={`p-${idx->Int.toString}`} profile onClick/>
     })
     ->array
   }
