@@ -14,6 +14,9 @@ let useUsers = () => {
       id: Obj.magic("id-12345"),
       name: "John Doe",
       avatar: Url("https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"),
+      age: 42,
+      gender: Male,
+      location: "London",
     })
   }
 

@@ -49,3 +49,17 @@ let sentences = [
         "ลองแบบมี emoji ดูสิ: 😂",
         "ลองใส่ HTML: <b>สวัสดี</b>",
       ]
+
+
+let profileList: array<Data_UserProfile.t> = [
+  {id: Obj.magic("1"), name: "John Doe", avatar: Url("https://www.gravatar.com/avatar/avatar1.png?d=monsterid"), age: 30, gender: Male, location: "New York"},
+  {id: Obj.magic("2"), name: "Jane Doe", avatar: Url("https://www.gravatar.com/avatar/avatar2.png?d=monsterid"), age: 25, gender: Female, location: "Los Angeles"},
+  {id: Obj.magic("3"), name: "Alice", avatar: Url("https://www.gravatar.com/avatar/avatar3.png?d=monsterid"), age: 20, gender: Female, location: "Chicago"},
+  {id: Obj.magic("4"), name: "Bob", avatar: Url("https://www.gravatar.com/avatar/avatar4.png?d=monsterid"), age: 35, gender: Male, location: "San Francisco"},
+  {id: Obj.magic("5"), name: "Charlie", avatar: Url("https://www.gravatar.com/avatar/avatar5.png?d=monsterid"), age: 40, gender: Male, location: "Boston"},
+  {id: Obj.magic("6"), name: "David", avatar: Url("https://www.gravatar.com/avatar/avatar6.png?d=monsterid"), age: 45, gender: Male, location: "Seattle"},
+  {id: Obj.magic("7"), name: "Eve", avatar: Url("https://www.gravatar.com/avatar/avatar7.png?d=monsterid"), age: 50, gender: Female, location: "Austin"},
+  {id: Obj.magic("8"), name: "Frank", avatar: Url("https://www.gravatar.com/avatar/avatar8.png?d=monsterid"), age: 55, gender: Male, location: "Denver"},
+  {id: Obj.magic("9"), name: "Grace", avatar: Url("https://www.gravatar.com/avatar/avatar9.png?d=monsterid"), age: 60, gender: Female, location: "Phoenix"},
+  {id: Obj.magic("10"), name: "Helen", avatar: Url("https://www.gravatar.com/avatar/avatar10.png?d=monsterid"), age: 65, gender: Female, location: "San Diego"},
+]

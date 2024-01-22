@@ -1,14 +1,23 @@
+open React
+
 
 @react.component
 let make = () => {
-  let (state, setState) = React.useState(() => 0)
 
-  let onClick = React.useCallback1(
-    _ => {
-      setState(s => s + 1)
-    },
-    [state],
-  )
+  let (profiles, setProfiles) = React.useState(_=>[])
 
-  <button onClick> {React.string("Click me")} </button>
+  useEffect0(() => {
+    setProfiles(_=>Data.Mock.profileList)
+    None
+  })
+  
+  <div className="user-profile-list">
+  {
+    profiles
+    ->Array.mapWithIndex((profile, idx)=>{
+      <UserProfileItem key={`p-${idx->Int.toString}`} profile />
+    })
+    ->array
+  }
+  </div>
 }

@@ -3,7 +3,7 @@ open Screen
 @react.component
 let make = () => {
   let url = RescriptReactRouter.useUrl()
-  let (myProfile, _setMyProfile) = React.useState(() => Some(Data.User.guest()))
+  let (myProfile, _setMyProfile) = React.useState(() => Data.Mock.profileList[0])
 
   let title = <div> {React.string("Chat")} </div>
 
@@ -14,7 +14,8 @@ let make = () => {
       | Some(_profile) =>
         <AuthContext.Provider value={me: myProfile}>
           {switch url.path {
-          | _ => <PrivateChat userId="id-12345" />
+          | list{"chat", userId} => <PrivateChat userId />
+          | _ => <UserList />
           // | list{"profile", userId} => <Profile userId/>
           // | list{"1n1", userId} => <PrivateChat userId/>
           // | list{} => <UserList />
