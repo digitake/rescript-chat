@@ -6,10 +6,7 @@ let make = (~userId) => {
   let {messages, sendMessage, status, close} = Hook.Chatroom.useChatroom(~chatroomId=userId)
   let {getUserById} = Hook.Users.useUsers()
 
-  //1. Load profile
   React.useEffect0(() => {
-    Js.log2("useEffect", userId)
-
     switch getUserById(userId) {
     | Some(user) => setTitle(user.name->React.string)
     | None => ()

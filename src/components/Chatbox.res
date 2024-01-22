@@ -1,8 +1,7 @@
 type chatData = array<Data.ChatItem.t>
 
 @react.component
-let make = (~chatData:array<Data.ChatItem.t>) => {
-
+let make = (~chatData: array<Data.ChatItem.t>) => {
   let viewRef = React.useRef(Js.Nullable.null)
   let me = AuthContext.useMyProfile()
 
@@ -16,19 +15,20 @@ let make = (~chatData:array<Data.ChatItem.t>) => {
     }
 
     None
-  }, [chatData]);
-
+  }, [chatData])
 
   <div className="chatbox">
-      {
-        chatData
-        ->Belt.Array.mapWithIndex((index, item) => {
-          let chatSide = me.id == item.sender ? ChatMessage.Right : Left
-          <ChatMessage key={index->Js.Int.toString} chat=item chatSide/>
-        })
-        ->React.array
+    {chatData
+    ->Belt.Array.mapWithIndex((index, item) => {
+      switch (item.msgType, item.sender) {
+      | (Chat, id) if id == me.id =>
+        <ChatMessage key={index->Js.Int.toString} chat=item chatSide=Right />
+      | (Chat, _) => <ChatMessage key={index->Js.Int.toString} chat=item chatSide=Left />
+      | (System, _) => <ChatMessage key={index->Js.Int.toString} chat=item chatSide=Center />
+      | _ => React.null
       }
-      <div ref={viewRef->ReactDOM.Ref.domRef}></div>
+    })
+    ->React.array}
+    <div ref={viewRef->ReactDOM.Ref.domRef} />
   </div>
-
 }
