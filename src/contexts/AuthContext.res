@@ -2,11 +2,18 @@
 open Data 
 
 type t = {
-  me: option<User.t>,
+  me: User.t,
 }
 
 let context = React.createContext({
-  me: None,
+  me: {
+    id: User.noUserId,
+    name: "",
+    avatar: Url(""),
+    age: 0,
+    gender: Unknown,
+    location: "",
+  },
 })
 
 module Provider = {
@@ -16,8 +23,6 @@ module Provider = {
 
 let useMyProfile = () => {
   let context = React.useContext(context)
-  switch context {
-  | {me: None} => Js.Exn.raiseError("useAuth must be used within a AuthProvider")
-  | {me: Some(user)} => user
-  }
+  
+  context.me
 }
