@@ -18,12 +18,9 @@ let make = () => {
       <Frame.WithTitlebar title>
         <AuthContext.Provider value={me}>
           {switch url.path {
-          | list{"chat", userId} => <PrivateChat userId />
-          | _ => <Login />
-          // | list{"profile", userId} => <Profile userId/>
-          // | list{"1n1", userId} => <PrivateChat userId/>
-          // | list{} => <UserList />
-          // | _ => <div>{React.string("Not found")}</div>
+            // | list{"profile", userId} => <Profile userId/>
+          | list{"1n1", userId} => <PrivateChat userId />
+          | _ => <Lobby />
           }}
         </AuthContext.Provider>
       </Frame.WithTitlebar>
