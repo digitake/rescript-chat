@@ -43,19 +43,17 @@ module Guest = {
               }
             </label>
             <FormControl>
-              <RadioGroup>
-                <Radio value="male" onChange=((e,v)=>{
-                  Js.log2("v=",ReactEvent.Form.target(e)["value"])
-                  Js.log2(e,v)
-                })/>
-                <Radio value=2 onChange=((e,v)=>{
-                  Js.log2("v=",ReactEvent.Form.target(e)["value"])
-                  Js.log2(e,v)
-                })/>
-                <Radio value={"hi":1} onChange=((e,v)=>{
-                  Js.log2("v=",ReactEvent.Form.target(e)["value"])
-                  Js.log2(e,v)
-                })/>
+              <FormLabel id="demo-radio-buttons-group-label">
+              {"Gender"->React.string}
+              </FormLabel>
+              <RadioGroup
+                ariaLabelledBy="demo-radio-buttons-group-label"
+                defaultValue="female"
+                name="radio-buttons-group"
+              >
+                <FormControlLabel value="female" control={<Radio />} label="Female" />
+                <FormControlLabel value="male" control={<Radio />} label="Male" />
+                <FormControlLabel value="other" control={<Radio />} label="Other" labelPlacement=#top/>
               </RadioGroup>
             </FormControl>
           </div>

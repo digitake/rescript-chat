@@ -3,6 +3,7 @@ open Mui__SharedTypes
 
 type props = {
   ...base,
+  ...formBase,
   children?: React.element,
   classes?: classes,
   row?: bool,

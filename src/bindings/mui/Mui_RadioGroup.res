@@ -1,9 +1,7 @@
 type props<'value> = {
   ...Mui_FormGroup.props,
   defaultValue?: 'value,
-  name?: string,
   onChange?: (ReactEvent.Form.t, string) => unit,
-  value?: 'value,
 }
 
 
