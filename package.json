@@ -12,14 +12,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@rescript/core": "^0.6.0",
-    "@rescript/react": "^0.11.0",
+    "@mui/material": "^5.15.6",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "rescript": "^11.0.0",
-    "sass": "^1.69.7"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@rescript/core": "^0.6.0",
+    "rescript": "^11.0.0",
+    "sass": "^1.69.7",
+    "@rescript/react": "^0.11.0",
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.15",
     "postcss": "^8.4.28",
