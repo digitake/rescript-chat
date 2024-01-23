@@ -1,5 +1,6 @@
 module Guest = {
   open Mui
+  open Data
 
   @react.component
   let make = (~onLoggedIn) => {
@@ -37,26 +38,23 @@ module Guest = {
               />
             </div>
           </div>
-          <div>
-            <label htmlFor="gender" className="block text-sm font-medium leading-6 text-gray-900">
-              {"Gender"->React.string
-              }
-            </label>
-            <FormControl>
-              <FormLabel id="demo-radio-buttons-group-label">
-              {"Gender"->React.string}
-              </FormLabel>
-              <RadioGroup
-                ariaLabelledBy="demo-radio-buttons-group-label"
-                defaultValue="female"
-                name="radio-buttons-group"
-              >
-                <FormControlLabel value="female" control={<Radio />} label="Female" />
-                <FormControlLabel value="male" control={<Radio />} label="Male" />
-                <FormControlLabel value="other" control={<Radio />} label="Other" labelPlacement=#top/>
-              </RadioGroup>
-            </FormControl>
-          </div>
+          
+          <FormControl>
+            <FormLabel id="demo-radio-buttons-group-label">
+            {"Gender"->React.string}
+            </FormLabel>
+            <RadioGroup
+              row=true
+              ariaLabelledBy="demo-radio-buttons-group-label"
+              defaultValue="female"
+              name="radio-buttons-group"
+            >
+              <FormControlLabel value="female" control={<Radio />} label=User.genderToString(Female) />
+              <FormControlLabel value="male" control={<Radio />} label=User.genderToString(Male) />
+              <FormControlLabel value="n/a" control={<Radio />} label=User.genderToString(Unknown)/>
+            </RadioGroup>
+          </FormControl>
+          
           
           <div>
             <button
