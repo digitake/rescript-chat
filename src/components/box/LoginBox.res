@@ -4,19 +4,16 @@ module Guest = {
 
   @react.component
   let make = (~onLoggedIn) => {
-
     let onLogInClicked = () => {
-      Js.log("Log in as guest clicked");
-      onLoggedIn();
-    };
+      Js.log("Log in as guest clicked")
+      onLoggedIn()
+    }
+
+    
 
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <img
-          className="mx-auto h-16 w-auto"
-          src="/logo.jpg"
-          alt="Chatdoo"
-        />
+        <img className="mx-auto h-16 w-auto" src="/logo.jpg" alt="Chatdoo" />
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
           {"Login as Guest"->React.string}
         </h2>
@@ -38,27 +35,60 @@ module Guest = {
               />
             </div>
           </div>
-          
-          <FormControl>
-            <FormLabel id="demo-radio-buttons-group-label">
-            {"Gender"->React.string}
-            </FormLabel>
+          <FormControl className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+            <FormLabel id="demo-radio-buttons-group-label"> {"Gender"->React.string} </FormLabel>
             <RadioGroup
               row=true
               ariaLabelledBy="demo-radio-buttons-group-label"
               defaultValue="female"
-              name="radio-buttons-group"
-            >
-              <FormControlLabel value="female" control={<Radio />} label=User.genderToString(Female) />
-              <FormControlLabel value="male" control={<Radio />} label=User.genderToString(Male) />
-              <FormControlLabel value="n/a" control={<Radio />} label=User.genderToString(Unknown)/>
+              name="radio-buttons-group">
+              <FormControlLabel
+                value="female" control={<Radio />} label={User.genderToString(Female)}
+              />
+              <FormControlLabel
+                value="male" control={<Radio />} label={User.genderToString(Male)}
+              />
+              <FormControlLabel
+                value="n/a" control={<Radio />} label={User.genderToString(Unknown)}
+              />
             </RadioGroup>
           </FormControl>
-          
-          
+          <FormControl className="mt-10 sm:mx-auto w-full sm:max-w-sm">
+            <Slider
+              ariaLabel="Restricted values"
+              defaultValue={25}
+              min={18}
+              max={55}
+              valueLabelFormat={Func((~value) => {`${value->Int.toString}+`->React.string})}
+              valueLabelDisplay=#auto
+              step={StickToMarks}
+              marks=Marks([
+                {
+                  value: 18,
+                  label: "18+",
+                },
+                {
+                  value: 25,
+                  label: "25",
+                },
+                {
+                  value: 35,
+                  label: "35",
+                },
+                {
+                  value: 45,
+                  label: "45",
+                },
+                {
+                  value: 55,
+                  label: "55+",
+                },
+              ])
+            />
+          </FormControl>
           <div>
             <button
-              onClick={_=>onLogInClicked()}
+              onClick={_ => onLogInClicked()}
               type_="submit"
               className="flex w-full justify-center rounded-md bg-gray-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
               {"Sign in"->React.string}
@@ -71,24 +101,17 @@ module Guest = {
   }
 }
 
-
 module Username = {
-
   @react.component
   let make = (~onLoggedIn) => {
-
     let onLogInClicked = () => {
-      Js.log("Log in clicked");
-      onLoggedIn();
-    };
+      Js.log("Log in clicked")
+      onLoggedIn()
+    }
 
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <img
-          className="mx-auto h-16 w-auto"
-          src="/logo.jpg"
-          alt="Your Company"
-        />
+        <img className="mx-auto h-16 w-auto" src="/logo.jpg" alt="Your Company" />
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
           {"Sign in to your account"->React.string}
         </h2>
@@ -135,7 +158,7 @@ module Username = {
           </div>
           <div>
             <button
-              onClick={_=>onLogInClicked()}
+              onClick={_ => onLogInClicked()}
               type_="submit"
               className="flex w-full justify-center rounded-md bg-gray-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
               {"Sign in"->React.string}
