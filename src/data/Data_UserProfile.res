@@ -1,8 +1,10 @@
 open Data_SharedTypes
 
 type userId  // persistent ID, this is unique to each user
-let noUserId = Obj.magic("")
+
+let noUserId: userId = Obj.magic("")
 external userIdToString: userId => string = "%identity"
+
 
 type gender =
 |Male
@@ -17,6 +19,14 @@ switch gender {
   |Other(s) => `🏳️‍🌈${s}`
   |Unknown => "🫢"
 }
+
+let genderFromString = s =>
+{switch s {
+|`🤷🏻‍♂️`|"male"=>Male
+|`🤷🏻‍♀️`|"female"=>Female
+|`🏳️‍🌈`|"other"=>Other("other")
+|_=>Unknown
+}}
 
 
 type gps = {
@@ -33,15 +43,11 @@ type t = {
   location: string,
 }
 
-// let empty = {
-//   id: noUserId,
-//   name: "",
-//   avatar: Base64(""),
-
-// }
-
-// let guest = () => {
-//   id: `guest${Js.Math.random_int(1000000, 10000000)->string_of_int}`->Obj.magic,
-//   name: "Guest",
-//   avatar: Base64(""),
-// }
+let makeUserProfile = (~avatar=Url(""), ~age=25, ~gender=Unknown, ~location="", ~name) => {
+  id: noUserId,
+  name,
+  avatar,
+  age,
+  gender,
+  location
+}
