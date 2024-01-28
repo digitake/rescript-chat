@@ -11,11 +11,12 @@ type props = {
   maxRows?: int,
   minRows?: int,
   multiline?: bool,
-  onChange?: (ReactEvent.Form.t, bool) => unit,
+  onChange?: (ReactEvent.Form.t, string) => unit,
   placeholder?: string,
   readOnly?: bool,
   rows?:int,
-  value?: string, // Even if we allow any value, it will be converted to a string
+  // value?: string, // We don't want to mixed controlled and uncontrolled input
+  defaultValue?: string,
 }
 
 
