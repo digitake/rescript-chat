@@ -1,6 +1,7 @@
 
 module Button = Mui_Button
 module ButtonBase = Mui_ButtonBase
+module ButtonGroup = Mui_ButtonGroup
 module FormControl = Mui_FormControl
 module FormControlLabel = Mui_FormControlLabel
 module FormGroup = Mui_FormGroup
