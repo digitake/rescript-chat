@@ -25,17 +25,14 @@ module Guest = {
             <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
               {"Name"->React.string}
             </label>
-            <div className="mt-2">
-              <input
-                id="name"
-                name="name"
-                type_="text"
-                autoComplete="text"
-                required=true
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                onChange={evt => setProfile(p=> {...p, name:ReactEvent.Form.target(evt)["value"]})}
+            <TextField
+              id="name"
+              name="name"
+              required=true
+              fullWidth=true
+              // value=profile.name
+              onChange={(_evt,name) => setProfile(p=> {...p, name})}
               />
-            </div>
           </div>
           <FormControl className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <FormLabel id="demo-radio-buttons-group-label"> {"Gender"->React.string} </FormLabel>
