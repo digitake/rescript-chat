@@ -40,6 +40,8 @@ type props = {
   sx?: Sx.props,
   orientation?: orientation,
   onClick?: ReactEvent.Form.t => unit,
+  className?: string,
+  @as("aria-label") ariaLabel?: string,
 }
 
 
