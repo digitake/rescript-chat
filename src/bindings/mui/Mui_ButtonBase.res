@@ -16,6 +16,5 @@ type props = {
   \"TouchRippleProps"?: touchRipple,
 }
 
-
 @module("@mui/material/ButtonBase")
 external make: React.component<props> = "default"
