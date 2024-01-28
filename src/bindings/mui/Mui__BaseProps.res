@@ -84,3 +84,5 @@ type inputBase = {
   @as("disableunderline") disableUnderline?: string,
   maxLength?: int,
 }
+
+type touchRipple
