@@ -28,7 +28,7 @@ let make = () => {
       </Button>
     </div>
     {switch loginMode {
-    | Username => <LoginBox.Username onLoggedIn/>
+    | Username => <LoginBox.Signin onLoggedIn/>
     | Guest => <LoginBox.Guest onLoggedIn/>
     }}
   </div>
