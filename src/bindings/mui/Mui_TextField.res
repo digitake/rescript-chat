@@ -2,6 +2,7 @@ open Mui__BaseProps
 
 type props = {
   ...Mui_FormControl.props,
+  autoComplete?: string,
   autoFocus?: bool,
   helperText?: string,
   inputProps?: inputBase,
@@ -15,6 +16,7 @@ type props = {
   placeholder?: string,
   readOnly?: bool,
   rows?:int,
+  type_?: string,
   // value?: string, // We don't want to mixed controlled and uncontrolled input
   defaultValue?: string,
 }

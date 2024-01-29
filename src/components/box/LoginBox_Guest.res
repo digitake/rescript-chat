@@ -11,8 +11,8 @@ let make = (~onLoggedIn) => {
   }
 
   <div className="flex min-h-full flex-col justify-center px-6 lg:px-8">
-    <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-      <div>
+    <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+      <FormControl className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm pb-6">
         <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
           {"Name"->React.string}
         </label>
@@ -24,7 +24,7 @@ let make = (~onLoggedIn) => {
           // value=profile.name
           onChange={(_evt, name) => setProfile(p => {...p, name})}
         />
-      </div>
+      </FormControl>
       <FormControl className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <FormLabel id="demo-radio-buttons-group-label"> {"Gender"->React.string} </FormLabel>
         <RadioGroup
@@ -78,7 +78,6 @@ let make = (~onLoggedIn) => {
           {"Sign in"->React.string}
         </Button>
       </div>
-      <p className="mt-10 text-center text-sm text-gray-500"> {"Not a member?"->React.string} </p>
     </div>
   </div>
 }

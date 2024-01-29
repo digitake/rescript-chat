@@ -22,12 +22,12 @@ let make = () => {
     <div className="sm:mx-auto sm:w-full sm:max-w-sm">
       <img className="mx-auto h-16 w-auto" src="/logo.jpg" alt="Your Company" />
       <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-        {"Sign in to your account"->React.string}
+        {"Sign in"->React.string}
       </h2>
     </div>
-    <ButtonGroup fullWidth=true className="py-4">
-      <Button onClick={_ => setLoginMode(_ => Username)}> {"Username"->React.string} </Button>
-      <Button onClick={_ => setLoginMode(_ => Guest)}> {"Guest"->React.string} </Button>
+    <ButtonGroup fullWidth=true className="py-4" variant=Text>
+      <Button variant={loginMode==Username?Contained:Text} onClick={_ => setLoginMode(_ => Username)}> {"Username"->React.string} </Button>
+      <Button variant={loginMode==Guest?Contained:Text} onClick={_ => setLoginMode(_ => Guest)}> {"Guest"->React.string} </Button>
     </ButtonGroup>
     {switch loginMode {
     | Username => <LoginBox.Signin onLoggedIn />

@@ -25,6 +25,7 @@ type color =
 type props = {
   ...Mui_ButtonBase.props,
   color?: color,
+  className?: string,
   disableElevation?: bool,
   disableFocusRipple?: bool,
   startIcon?: React.element,

@@ -1,9 +1,14 @@
+open Mui
+open Data
+
 @react.component
   let make = (~onLoggedIn) => {
-    let onLogInClicked = () => {
+    let (profile, setProfile) = React.useState(() => User.makeUserProfile(~name=""))
+
+    let onLogInClicked = _ => {
 
       Js.log("Log in clicked")
-      onLoggedIn()
+      onLoggedIn(profile)
     }
 
     <div className="flex min-h-full flex-col justify-center px-6 lg:px-8">
@@ -14,6 +19,15 @@
               {"Username"->React.string}
             </label>
             <div className="mt-2">
+              <TextField
+          id="email"
+          name="email"
+          required=true
+          fullWidth=true
+          autoComplete="email"
+          type_="email"
+          onChange={(_evt, name) => setProfile(p => {...p, name})}
+        />
               <input
                 id="email"
                 name="email"
@@ -47,20 +61,14 @@
               />
             </div>
           </div>
-          <div>
-            <button
-              onClick={evt => {
-                evt->ReactEvent.Mouse.preventDefault
-                evt->JsxEventU.Mouse.stopPropagation
-                onLogInClicked()
-              }}
-              type_="submit"
-              className="flex w-full justify-center rounded-md bg-gray-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-              {"Sign in"->React.string}
-            </button>
-          </div>
+            <Button
+              variant=Contained
+              onClick=onLogInClicked
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600"
+            >
+              {"Log in"->React.string}
+            </Button>
         </form>
-        <p className="mt-10 text-center text-sm text-gray-500"> {"Not a member?"->React.string} </p>
       </div>
     </div>
   }
