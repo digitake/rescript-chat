@@ -1,6 +1,6 @@
 open Mui__BaseProps
 
-type props = {
+type props<'slotProps> = {
   ...Mui_FormControl.props,
   autoComplete?: string,
   autoFocus?: bool,
@@ -12,15 +12,16 @@ type props = {
   maxRows?: int,
   minRows?: int,
   multiline?: bool,
-  onChange?: (ReactEvent.Form.t, string) => unit,
+  onChange?: ReactEvent.Form.t => unit,
   placeholder?: string,
   readOnly?: bool,
   rows?:int,
   @as("type") type_?: string,
   // value?: string, // We don't want to mixed controlled and uncontrolled input
   defaultValue?: string,
+  slotProps?: Js.t<{..}> as 'slotProps,
 }
 
 
 @module("@mui/material/TextField")
-external make: React.component<props> = "default"
+external make: React.component<props<'slotProps>> = "default"
