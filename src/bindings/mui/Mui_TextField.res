@@ -16,7 +16,7 @@ type props = {
   placeholder?: string,
   readOnly?: bool,
   rows?:int,
-  type_?: string,
+  @as("type") type_?: string,
   // value?: string, // We don't want to mixed controlled and uncontrolled input
   defaultValue?: string,
 }
