@@ -5,6 +5,10 @@ open Data
 let make = (~onLoggedIn) => {
   let (profile, setProfile) = React.useState(() => User.makeUserProfile(~name=""))
 
+  let isValidProfile = (profile: User.t) => {
+    profile.name != ""
+  }
+
   let onLogInClicked = () => {
     Js.log2("Log in as guest clicked", profile)
     onLoggedIn(profile)
@@ -13,16 +17,20 @@ let make = (~onLoggedIn) => {
   <div className="flex min-h-full flex-col justify-center px-6 lg:px-8">
     <div className="sm:mx-auto sm:w-full sm:max-w-sm">
       <FormControl className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm pb-6">
-        <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
-          {"Name"->React.string}
-        </label>
         <TextField
+          inputProps={dataP1Ignore: true}
           id="name"
           name="name"
+          label={"Name"->React.string}
+          type_="text"
+          autoComplete="off"
           required=true
           fullWidth=true
-          // value=profile.name
-          onChange={(_evt, name) => setProfile(p => {...p, name})}
+          onChange={(event) => 
+          {
+            let name = ReactEvent.Form.target(event)["value"]
+            setProfile(p => {...p, name})
+          }}
         />
       </FormControl>
       <FormControl className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -74,7 +82,12 @@ let make = (~onLoggedIn) => {
         />
       </FormControl>
       <div className="mt-10 sm:mx-auto w-full sm:max-w-sm">
-        <Button variant=Contained fullWidth=true color=Primary onClick={_ => onLogInClicked()}>
+        <Button
+          disabled={!isValidProfile(profile)}
+          variant=Contained
+          fullWidth=true
+          color=Primary
+          onClick={_ => onLogInClicked()}>
           {"Sign in"->React.string}
         </Button>
       </div>

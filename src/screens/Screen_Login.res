@@ -12,7 +12,7 @@ type loginMode =
 
 @react.component
 let make = () => {
-  let (loginMode, setLoginMode) = useState(() => Username)
+  let (loginMode, setLoginMode) = useState(() => Guest)
 
   let onLoggedIn = auth => {
     Js.log(auth)
