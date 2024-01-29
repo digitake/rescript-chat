@@ -18,7 +18,6 @@ let make = (~onLoggedIn) => {
     <div className="sm:mx-auto sm:w-full sm:max-w-sm">
       <FormControl className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm pb-6">
         <TextField
-          inputProps={dataP1Ignore: true}
           id="name"
           name="name"
           label={"Name"->React.string}

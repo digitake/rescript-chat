@@ -11,11 +11,12 @@ type loginMode =
   | Guest
 
 @react.component
-let make = () => {
+let make = (~onLoggedIn) => {
   let (loginMode, setLoginMode) = useState(() => Guest)
 
   let onLoggedIn = auth => {
     Js.log(auth)
+    onLoggedIn(auth)
   }
 
   <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -25,7 +26,7 @@ let make = () => {
         {"Sign in"->React.string}
       </h2>
     </div>
-    <ButtonGroup fullWidth=true className="py-4" variant=Text>
+    <ButtonGroup fullWidth=true className="py-4 px-6" variant=Text>
       <Button variant={loginMode==Username?Contained:Text} onClick={_ => setLoginMode(_ => Username)}> {"Username"->React.string} </Button>
       <Button variant={loginMode==Guest?Contained:Text} onClick={_ => setLoginMode(_ => Guest)}> {"Guest"->React.string} </Button>
     </ButtonGroup>

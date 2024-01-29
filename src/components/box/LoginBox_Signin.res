@@ -25,7 +25,9 @@ let make = (~onLoggedIn) => {
               fullWidth=true
               autoComplete="email"
               type_="email"
-              onChange={(username) => setProfile(p => {...p, name:username})}
+              onChange={(event) => {
+                setProfile(p => {...p, name:event->targetValue})
+              }}
             />
           </div>
         </div>

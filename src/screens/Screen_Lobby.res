@@ -12,7 +12,7 @@ let make = () => {
   })
 
   let onClick = (profile:User.t) =>{
-    RescriptReactRouter.push(`/chat/${profile.id->User.userIdToString}`)
+    RescriptReactRouter.push(`/1n1/${profile.id->User.userIdToString}`)
   }
   
   <div className="user-profile-list">
