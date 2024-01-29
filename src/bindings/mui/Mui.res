@@ -11,3 +11,9 @@ module Radio = Mui_Radio
 module Slider = Mui_Slider
 module TextField = Mui_TextField
 module Typography = Mui_Typography
+
+
+let targetValue = (event:ReactEvent.Form.t)=>{
+  let target = ReactEvent.Form.target(event)
+  target["value"]
+}
