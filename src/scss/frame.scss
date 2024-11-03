@@ -1,14 +1,17 @@
+@use "animation";
+@use "variables";
+
 .frame {
 
   .frame-title-bar {
-    background-color: $color-primary;
-    color: $color-main-text;
+    background-color: variables.$color-primary;
+    color: variables.$color-main-text;
     padding: 0.5rem;
     text-align: center;
   }
 
   .frame-content {
-    background-color: $color-secondary-background;
+    background-color: variables.$color-secondary-background;
   }
 
   &.side-bar {
@@ -17,16 +20,16 @@
 
     .frame-side-bar {
       flex: 0 0 auto;
-      width: $side-bar-width;
-      background-color: $side-bar-background-color;
+      width: variables.$side-bar-width;
+      background-color: variables.$side-bar-background-color;
       height: 100%;
       
       // on md screen and below, side bar is deteched from the frame by position: absolute
-      @media screen and (max-width: $screen-md-min) {
+      @media screen and (max-width: variables.$screen-md-min) {
         z-index: 1000;
         position: absolute;
-        min-width: $side-bar-min-width;
-        @include animation-slide;
+        min-width: variables.$side-bar-min-width;
+        @include animation.animation-slide;
       }
       
       .-item-header {
@@ -38,7 +41,7 @@
           cursor: pointer;
         }
 
-        @media screen and (min-width: $screen-md-min) {
+        @media screen and (min-width: variables.$screen-md-min) {
           .-close-button {
             display: none;
           }
@@ -59,8 +62,8 @@
       flex: 1 1 auto;
       overflow-y: auto;
 
-      @media screen and (max-width: $screen-md-min) {
-        margin-left: $side-bar-min-width;
+      @media screen and (max-width: variables.$screen-md-min) {
+        margin-left: variables.$side-bar-min-width;
       }
     }
   }

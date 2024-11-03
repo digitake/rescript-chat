@@ -1,13 +1,13 @@
-@import '_reset.scss';
-@import '_fonts.scss';
-@import '_variables.scss';
-@import '_animation.scss';
-@import '_responsive.scss';
-@import 'main.scss';
-@import 'frame.scss';
-@import 'box.scss';
-@import 'chatbox.scss';
-@import 'userprofile.scss';
+@use '_reset.scss';
+@use '_fonts.scss';
+@use '_variables.scss';
+@use '_animation.scss';
+@use '_responsive.scss';
+@use 'main.scss';
+@use 'frame.scss';
+@use 'box.scss';
+@use 'chatbox.scss';
+@use 'userprofile.scss';
 
 @tailwind base;
 @tailwind components;

@@ -1,3 +1,5 @@
+@use "variables";
+
 .chat {
   position: relative;
   height: 100%;
@@ -8,10 +10,10 @@
   flex:4;
 
   .inputbox {
-    background-color: $color-main-background;
+    background-color: variables.$color-main-background;
     display: flex;
     height: 50px;
-    border: solid 1px $color-main-text-light;
+    border: solid 1px variables.$color-main-text-light;
   }
   
   .inputbox .label1 {
@@ -38,21 +40,21 @@
     text-transform: uppercase;
 
     cursor: pointer;
-    background-color: $color-primary-light; 
-    color: $color-main-text;
-    border: 1px solid $color-main-button;
+    background-color: variables.$color-primary-light; 
+    color: variables.$color-main-text;
+    border: 1px solid variables.$color-main-button;
     border-radius: 12px 0px 0px 12px;
     transition-duration: 0.1s;
 
     &:hover {
-      background-color: $color-main-button;
-      color: $color-main-text-lighter;
+      background-color: variables.$color-main-button;
+      color: variables.$color-main-text-lighter;
       border-radius: 12px 12px 12px 12px;
     }
 
     &.disabled {
-      background-color: $color-secondary-light;
-      color: $color-main-text-lighter;
+      background-color: variables.$color-secondary-light;
+      color: variables.$color-main-text-lighter;
       border: 0px;
       border-radius: 12px 12px 12px 12px;
       cursor: not-allowed;
@@ -90,16 +92,16 @@
     transition: all 0.5s;
     padding: 0.5rem 1rem 0.5rem 1rem;
     border-radius: 1rem;
-    background-color: $color-main-background;
+    background-color: variables.$color-main-background;
     display: inline-block;
-    color: $color-main-text;
+    color: variables.$color-main-text;
 
     &.left {
-      box-shadow: 2px 2px $color-main-shadow;
+      box-shadow: 2px 2px variables.$color-main-shadow;
     }
 
     &.right {
-      box-shadow: 2px 2px $color-main-shadow;
+      box-shadow: 2px 2px variables.$color-main-shadow;
     }
 
     .avatar {

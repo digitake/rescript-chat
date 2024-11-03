@@ -1,3 +1,4 @@
+@use "sass:color";
 // White theme
 $color-primary: #007bff;
 $color-primary-light: #c3d9ff;
@@ -14,10 +15,10 @@ $color-main-button-hover: #007bff;
 
 
 // Secondary color is used for the frame
-$color-secondary-background: lighten($color-main-background, 10%);
-$color-secondary-text: lighten($color-main-text, 10%);
-$color-secondary-text-light: lighten($color-main-text-light, 10%);
-$color-secondary-shadow: lighten($color-main-shadow, 10%);
+$color-secondary-background: color.adjust($color-main-background, $lightness: 10%);
+$color-secondary-text: color.adjust($color-main-text, $lightness: 10%);
+$color-secondary-text-light: color.adjust($color-main-text-light, $lightness: 10%);
+$color-secondary-shadow: color.adjust($color-main-shadow, $lightness: 10%);
 
 
 
