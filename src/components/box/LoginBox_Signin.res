@@ -1,9 +1,12 @@
 open Mui
 open Data
 
+// Perform login authentication here before calling onLoggedIn
+
 @react.component
 let make = (~onLoggedIn) => {
   let (profile, setProfile) = React.useState(() => User.makeUserProfile(~name=""))
+  
 
   let onLogInClicked = _ => {
     Js.log("Log in clicked")
@@ -26,7 +29,20 @@ let make = (~onLoggedIn) => {
               autoComplete="email"
               type_="email"
               onChange={(event) => {
-                setProfile(p => {...p, name:event->targetValue})
+                setProfile(p => {...p, name:event->targetValueForm})
+              }}
+              onKeyPress={(event) => {
+                let evtKey = event->ReactEvent.Keyboard.key
+                let value = event->targetValueKeyboard
+                Js.log3("Key pressed", evtKey, value)
+                if (value !== "" && evtKey === "Enter") {
+                  // Focus on the password field
+                  let passwordField = ReactDOM.querySelector("#password")
+                  switch (passwordField) {
+                  | Some(field) => ReactDOM.domElementToObj(field)["focus"]()
+                  | None => ()
+                  }
+                }
               }}
             />
           </div>
@@ -51,6 +67,14 @@ let make = (~onLoggedIn) => {
               autoComplete="current-password"
               type_="password"
               onChange={_=>()}
+              onKeyPress={(event) => {
+                let evtKey = event->ReactEvent.Keyboard.key
+                let value = event->targetValueKeyboard
+                Js.log3("Key pressed", evtKey, value)
+                if (value !== "" && evtKey === "Enter") {
+                  onLogInClicked()
+                }
+              }}
             />
           </div>
         </div>
