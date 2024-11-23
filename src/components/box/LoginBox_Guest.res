@@ -4,9 +4,26 @@ open Data
 let genderToString = User.genderToString
 let genderFromString = User.genderFromString
 
+// Save guest name to local storage
+let saveGuestName = (name: string) => {
+  open Dom.Storage2
+  Js.log2("Saving guest name", name)
+  localStorage->setItem("LoginBox_Guest_guestName", name)
+}
+
+let loadGuestName = () => {
+  open Dom.Storage2
+  localStorage->getItem("LoginBox_Guest_guestName")->Option.getOr("")
+}
+
 @react.component
 let make = (~onLoggedIn) => {
-  let (profile, setProfile) = React.useState(() => User.makeUserProfile(~name=""))
+  let (profile, setProfile) = React.useState(() => User.makeUserProfile(~name=loadGuestName()))
+
+  React.useEffect1(() => {
+    Js.log2("Guest profile changed", profile)
+    None
+  }, [profile])
 
   let isValidProfile = (profile: User.t) => {
     profile.name != ""
@@ -15,6 +32,7 @@ let make = (~onLoggedIn) => {
   let onLogInClicked = () => {
     Js.log2("Log in as guest clicked", profile)
     onLoggedIn(profile)
+    saveGuestName(profile.name)
   }
 
   <div className="flex min-h-full flex-col justify-center px-6 lg:px-8">
@@ -28,10 +46,10 @@ let make = (~onLoggedIn) => {
           type_="text"
           required=true
           fullWidth=true
+          defaultValue=profile.name
           onChange={(event) => 
           {
-            let name = ReactEvent.Form.target(event)["value"]
-            setProfile(p => {...p, name})
+            setProfile(p => {...p, name: event->targetValueForm})
           }}
           onKeyPress={(event) => {
             if (event->ReactEvent.Keyboard.key === "Enter") {
