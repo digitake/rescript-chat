@@ -1,6 +1,9 @@
 open Mui
 open Data
 
+let genderToString = User.genderToString
+let genderFromString = User.genderFromString
+
 @react.component
 let make = (~onLoggedIn) => {
   let (profile, setProfile) = React.useState(() => User.makeUserProfile(~name=""))
@@ -20,9 +23,9 @@ let make = (~onLoggedIn) => {
         <TextField
           id="name"
           name="name"
+          autoComplete="guest-name"
           label={"Name"->React.string}
           type_="text"
-          autoComplete="off"
           required=true
           fullWidth=true
           onChange={(event) => 
@@ -37,14 +40,13 @@ let make = (~onLoggedIn) => {
         <RadioGroup
           row=true
           ariaLabelledBy="demo-radio-buttons-group-label"
-          defaultValue="female"
-          onChange={(_evt, v) => setProfile(p => {...p, gender: v->User.genderFromString})}
+          defaultValue="n/a"
+          onChange={(_evt, v) => setProfile(p => {...p, gender: v->genderFromString})}
           name="radio-buttons-group">
-          <FormControlLabel
-            value="female" control={<Radio />} label={User.genderToString(Female)}
-          />
-          <FormControlLabel value="male" control={<Radio />} label={User.genderToString(Male)} />
-          <FormControlLabel value="n/a" control={<Radio />} label={User.genderToString(Unknown)} />
+          <FormControlLabel value="female" control={<Radio />} label={genderToString(Female)}/>
+          <FormControlLabel value="male" control={<Radio />} label={genderToString(Male)} />
+          <FormControlLabel value="other" control={<Radio />} label={genderToString(Other(""))} />
+          <FormControlLabel value="n/a" control={<Radio />} label={genderToString(Unknown)} />
         </RadioGroup>
       </FormControl>
       <FormControl className="mt-10 sm:mx-auto w-full sm:max-w-sm">
