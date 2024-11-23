@@ -13,7 +13,12 @@ module TextField = Mui_TextField
 module Typography = Mui_Typography
 
 
-let targetValue = (event:ReactEvent.Form.t)=>{
+let targetValueForm = (event:ReactEvent.Form.t)=>{
   let target = ReactEvent.Form.target(event)
+  target["value"]
+}
+
+let targetValueKeyboard = (event:ReactEvent.Keyboard.t)=>{
+  let target = ReactEvent.Keyboard.target(event)
   target["value"]
 }
