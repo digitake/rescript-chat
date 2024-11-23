@@ -10,9 +10,37 @@ type loginMode =
   | Username
   | Guest
 
+// Save / Load Login mode default screen
+module LocalStorage = {
+  open Dom.Storage2
+
+  let save = (loginMode) => {
+    localStorage->setItem("loginMode", switch loginMode {
+      | Username => "Username"
+      | Guest => "Guest"
+    })
+  }
+
+  let load = () => {
+    localStorage
+    ->getItem("loginMode")
+    ->Option.mapOr(Guest, x => switch x {
+      | "Username" => Username
+      | "Guest" => Guest
+      | _ => Guest
+    })
+  }
+}
+
 @react.component
 let make = (~onLoggedIn) => {
-  let (loginMode, setLoginMode) = useState(() => Guest)
+  let (loginMode, setLoginMode) = useState(() => LocalStorage.load())
+
+  // listen to loginMode changes
+  useEffect1(() => {
+    LocalStorage.save(loginMode)
+    None
+  }, [loginMode])
 
   let onLoggedIn = auth => {
     Js.log(auth)
