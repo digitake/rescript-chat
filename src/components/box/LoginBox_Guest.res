@@ -19,20 +19,27 @@ let loadGuestName = () => {
 @react.component
 let make = (~onLoggedIn) => {
   let (profile, setProfile) = React.useState(() => User.makeUserProfile(~name=loadGuestName()))
+  let {loginAsGuest} = Hook_Auth.useAuth()
 
-  React.useEffect1(() => {
-    Js.log2("Guest profile changed", profile)
-    None
-  }, [profile])
+  // React.useEffect1(() => {
+  //   Js.log2("Guest profile changed", profile)
+  //   None
+  // }, [profile])
 
   let isValidProfile = (profile: User.t) => {
     profile.name != ""
   }
 
   let onLogInClicked = () => {
-    Js.log2("Log in as guest clicked", profile)
+    // Js.log2("Log in as guest clicked", profile)
     onLoggedIn(profile)
-    saveGuestName(profile.name)
+    loginAsGuest(profile.name)
+    ->Promise.then(token => {
+      Js.log2("Logged in as guest!!!", token);
+      saveGuestName(profile.name)
+      Promise.resolve(None)
+    })
+    ->ignore
   }
 
   <div className="flex min-h-full flex-col justify-center px-6 lg:px-8">

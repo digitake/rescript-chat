@@ -1,4 +1,5 @@
 open Data_SharedTypes
+open Data_Message
 
 type data =
   | Text(string)
@@ -11,29 +12,12 @@ type data =
 type senderId = Data_UserProfile.userId
 let noSender = Obj.magic("")
 
-
-type msgType = 
-| Chat
-| System
-| UserEvent
-| Unknown;
-
-
 type t = {
   sender: senderId,  
   data: data,
   timestamp: Js.Date.t,
   msgType: msgType,
   subtype: string,
-}
-
-let msgTypeOfString = (str: string): msgType => {
-  switch str {
-  | "chat" => Chat
-  | "system" => System
-  | "user.event" => UserEvent
-  | _ => Unknown
-  }
 }
 
 module Decode = {
@@ -44,7 +28,7 @@ module Decode = {
         Js.Dict.get(obj, "type")
         ->Option.flatMap(x => Js.Json.decodeString(x))
         ->Option.map(x => msgTypeOfString(x))
-        ->Option.getOr(Unknown)
+        ->Option.getOr(Undefined)
         let senderId =
           Js.Dict.get(obj, "sender")
           ->Option.flatMap(x => Js.Json.decodeString(x))
@@ -84,7 +68,7 @@ module Decode = {
         sender: noSender,
         data: Text("?"),
         timestamp: Js.Date.make(),
-        msgType: Unknown,
+        msgType: Undefined,
         subtype: "",
       }
     }

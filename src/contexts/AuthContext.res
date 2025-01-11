@@ -3,6 +3,7 @@ open Data
 
 type t = {
   me: User.t,
+  token: string,
 }
 
 let context = React.createContext({
@@ -14,6 +15,7 @@ let context = React.createContext({
     gender: Unknown,
     location: "",
   },
+  token: "",
 })
 
 module Provider = {
@@ -24,5 +26,5 @@ module Provider = {
 let useMyProfile = () => {
   let context = React.useContext(context)
   
-  context.me
+  {me: context.me, token: context.token}
 }

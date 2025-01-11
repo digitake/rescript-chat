@@ -43,7 +43,7 @@ let make = (~onLoggedIn) => {
   }, [loginMode])
 
   let onLoggedIn = auth => {
-    Js.log(auth)
+    Js.log2("ScreenLogin::", auth)
     onLoggedIn(auth)
   }
 

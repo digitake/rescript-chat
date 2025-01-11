@@ -3,7 +3,7 @@ type chatData = array<Data.ChatItem.t>
 @react.component
 let make = (~chatData: array<Data.ChatItem.t>) => {
   let viewRef = React.useRef(Js.Nullable.null)
-  let me = AuthContext.useMyProfile()
+  let {me} = AuthContext.useMyProfile()
 
   React.useEffect1(() => {
     switch viewRef.current {

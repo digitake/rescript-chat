@@ -12,6 +12,7 @@
 
   .frame-content {
     background-color: variables.$color-secondary-background;
+    display: flex;
   }
 
   &.side-bar {
@@ -86,6 +87,11 @@
       flex: 1 1 auto;
       overflow-y: auto;
       margin-left: initial;
+      flex-direction: column;
     }
   }
+}
+
+.half-containers {
+  flex: 1;
 }

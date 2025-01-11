@@ -5,6 +5,7 @@
 
 open Webapi
 open React
+open Data
 
 type status =
   | Open(Js.Date.t)
@@ -13,25 +14,24 @@ type status =
   | Connecting
 
 type t = {
-  sessionId: option<string>,          // The session id that the server uses to identify the client
-  messages: array<Data.ChatItem.t>,
+  sessionId: option<string>, // The session id that the server uses to identify the client
+  messages: array<ChatItem.t>,
   status: status,
   sendMessage: string => unit,
   close: unit => unit,
-  users: array<Data.ChatItem.senderId>,
-  events: array<Data.ChatItem.t>,
+  users: array<User.t>,
+  // events: array<ChatItem.t>,
 }
-
 
 let useChatroom = (~autoReconnect=true, ~chatroomId) => {
   let target = `${Config.websocketBaseURL}/chatroom/${chatroomId}/`
 
   let socketRef = useRef(None)
-  let me = AuthContext.useMyProfile()
-  
+  let {me} = AuthContext.useMyProfile()
+
   let (messages, setMessages) = useState(() => [])
   let (status, setStatus) = useState(() => Connecting)
-  let (events, setEvents) = useState(() => [])
+  let (_events, setEvents) = useState(() => [])
   let (users, setUsers) = useState(() => [])
 
   // This is the session id that the server will use to identify the client
@@ -39,67 +39,75 @@ let useChatroom = (~autoReconnect=true, ~chatroomId) => {
   let (sessionId, setSessionId) = useState(() => None)
 
   useEffect1(() => {
-    Js.log2("session id changed", sessionId)
+    if sessionId != None {
+      Js.log2("session id changed", sessionId)
+    }
 
     None
   }, [sessionId])
 
-  let onSocketOpen = (_socket) => {
+  let onSocketOpen = _socket => {
     setStatus(_ => Open(Js.Date.make()))
   }
 
-  let onSocketClose = () => {
+  let onSocketClose = (closeEvent) => {
+    Js.log2("Socket closed because", closeEvent);
     setStatus(_ => Closed(Js.Date.make()))
   }
 
-  let handleUserEventMessage = (item:Data.ChatItem.t) => {
+  let handleUserEventMessage = (item: Js.Json.t) => {
     Js.log4("handleUserEvent", item, "session", sessionId)
-    switch item.subtype {
-    | "join" => {
+    let userEvent = item->UserEvent.Decode.data
+    Js.log2("User event", userEvent)
+    switch userEvent.eventType {
+    | UserJoined => {
         setEvents(oldEvents => oldEvents->Array.concat([item]))
-        setUsers(oldUsers => oldUsers->Array.concat([item.sender]))
+        setUsers(oldUsers => oldUsers->Array.concat([userEvent.user]))
       }
-    | "leave" => {
+    | UserLeft => {
         setEvents(oldEvents => oldEvents->Array.concat([item]))
-        setUsers(oldUsers => oldUsers->Array.filter(u => u != item.sender))
+        setUsers(oldUsers => oldUsers->Array.filter(u => u.id != userEvent.user.id))
       }
-    | _ => ()
     }
   }
 
-  let handleSystemMessage = (item:Data.ChatItem.t) => {
+  let handleSystemMessage = (item: Js.Json.t) => {
     Js.log2("handleSystem", item)
-    switch (item.subtype, item.data) {
-    | ("session", Text(id)) => {
-        Js.log2("Setting session id", id)
+    let item = item->SystemEvent.Decode.data
+    Js.log2("afterdecode::handleSystem", item)
+    
+    switch item.eventType {
+    | Session(id) => {
+        Js.log2("Session id received", id)
         setSessionId(_=>Some(id))
       }
-    | _ => ()
+    | _ => Js.log2("Received system message without type", item)
     }
   }
 
-  let handleChatMessage = (item:Data.ChatItem.t) => {
+  let handleChatMessage = (item: Js.Json.t) => {
     Js.log4("handleChat", item, "session", sessionId)
+    let item = ChatItem.Decode.item(item)
     let replacedSessionId = {
       ...item,
-      sender: Some(Obj.magic(item.sender)) == sessionId ? me.id : item.sender
+      sender: Some(Obj.magic(item.sender)) == sessionId ? me.id : item.sender,
     }
-    Js.log3(sessionId,"==?", item.sender)
+    Js.log3(sessionId, "==?", item.sender)
     setMessages(oldMsg => oldMsg->Array.concat([replacedSessionId]))
   }
 
-  let onSocketMessage = (_socket, event:WebSocket.messageEvent<Webapi__Blob.t>
- ) => {
+  let onSocketMessage = (_socket, event: WebSocket.messageEvent<Webapi__Blob.t>) => {
     switch event.data {
     | String(rawJson) => {
         let json = Js.Json.parseExn(rawJson)
-        let item = Data.ChatItem.Decode.item(json)
 
-        switch item.msgType {
-        | Chat => handleChatMessage(item)
-        | UserEvent => handleUserEventMessage(item)
-        | System => handleSystemMessage(item)
-        | _ => ()
+        let msg = Message.Decode.item(json)
+        
+        switch msg.msgType {
+        | UserEvent => handleUserEventMessage(msg.data)
+        | System => handleSystemMessage(msg.data)
+        | Chat => handleChatMessage(msg.data)
+        | _ => Js.log2("Received message without type", json)
         }
       }
     | _ => Js.log("Received non-string message")
@@ -107,18 +115,17 @@ let useChatroom = (~autoReconnect=true, ~chatroomId) => {
   }
 
   let installListeners = socket => {
-    socket->WebSocket.addOpenListener(_=> onSocketOpen(socket))
+    socket->WebSocket.addOpenListener(_ => onSocketOpen(socket))
     socket->WebSocket.addMessageListener(evt => onSocketMessage(socket, evt))
-    socket->WebSocket.addCloseListener(_=> onSocketClose())
+    socket->WebSocket.addCloseListener(closeEvent => onSocketClose(closeEvent))
   }
 
   let connect = url => {
     // The is very side-effect full. The connect method will ensure that the socket is open
     // If the socket is already open, it will do nothing and return the same socket
     // If the socket is not open, it will create a new socket and return it
-
     let _prepSocket = () => {
-      let socket = Api.WebSocket.makeWithSubProtocol(url,["chatdoo-v1"])
+      let socket = Api.WebSocket.makeWithSubProtocol(url, ["chatdoo-v1"])
       socketRef.current = Some(socket)
       installListeners(socket)
     }
@@ -130,6 +137,8 @@ let useChatroom = (~autoReconnect=true, ~chatroomId) => {
     | Some(s) if !(s->WebSocket.isOpen) => _prepSocket()
     | _ => Js.log("Socket already open")
     }
+
+    socketRef.current
   }
 
   let sendMessage = msg => {
@@ -151,26 +160,43 @@ let useChatroom = (~autoReconnect=true, ~chatroomId) => {
     }
   }
 
+  let _close = (socket:WebSocket.t<Blob.t>) => {
+    if (socket.readyState === WebSocket.readyStateConnected)
+    {
+        Js.log("_close:Closing websocket...")
+        socket->WebSocket.close
+      }
+  }
+
   let close = () => {
     switch socketRef.current {
-    | Some(s) => {
-        Js.log("Closing websocket...")
-        s->WebSocket.close
-      }
-    | _ => ()
+    | Some(s) => _close(s)
+    | _ => Js.log("Socket not connected")
     }
   }
 
-  React.useEffect1(()=>{
+  // Not sure why I need this?
+  // let updateName = (name) => {
+  //   // This will update the name of the user
+  //   Js.log2("Updating name to", name)
+  //   let updatedUser = {...me, name}
+  //   AuthContext.updateMyProfile(updatedUser)
+
+  // }
+
+  React.useEffect1(() => {
+    // This is the first time the component is mounted
+    
     switch status {
-    | Closed(_) => {
-        if autoReconnect {
-          let _ = setTimeout(() => {
-            Js.log4("Reconnecting to websocket...", target, "reason:", status)
-            connect(target)
+    | Closed(_) => if autoReconnect {
+        let _ = setTimeout(() => {
+          Js.log4("Reconnecting by autoReconnect to websocket...", target, "reason:", status)
+          //connect(target)
         }, 5000)
-        }
       }
+    | Open(_) => {
+        Js.log("Socket is openned")
+    }
     | _ => ()
     }
 
@@ -178,10 +204,14 @@ let useChatroom = (~autoReconnect=true, ~chatroomId) => {
   }, [status])
 
   React.useEffect0(() => {
-    connect(target)
+    // This is the first time the component is mounted
+    let socket = connect(target)
 
-    Some(close)
+    Some(()=>{
+      Js.log2("Component is unmounting, closing websocket", socket)
+      socket->Option.mapOr((),_close)
+    })
   })
 
-  {sessionId, messages, status, sendMessage, close, users, events}
+  {sessionId, messages, status, sendMessage, close, users}
 }
